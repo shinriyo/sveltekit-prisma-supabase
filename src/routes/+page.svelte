@@ -1,12 +1,11 @@
 <script lang="ts">
     // import type { ChangeEventHandler } from 'svelte/elements';
     import type { PageData } from './$types';
-    import type { SupabaseClient } from '@supabase/supabase-js'
-    export let supabase: SupabaseClient
+    // import type { SupabaseClient } from '@supabase/supabase-js'
+    // export let supabase: SupabaseClient
     export let data: PageData;
-    const { users } = data;
+    const { users, supabase } = data;
 
-    // const session = supabase.auth.session()
     // アップロード
     import { Label, Button } from 'flowbite-svelte'
     // let files: FileList | null = null;
