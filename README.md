@@ -43,3 +43,12 @@ You can preview the production build with `npm run preview`.
 npx prisma format
 
 https://zenn.dev/shimabukuromeg/scraps/51ea9b884fc607
+
+
+デバッグコンソールで　front.js:8 Uncaught ReferenceError: browser is not defined　出る。
+プラグインのせいらしい。
+
+
+# Auth
+
+Sveltekit × supabase で認証機能を作る
