@@ -46,6 +46,20 @@
             await supabase.storage.from('avatars').upload(filePath, file)
         }
     }
+
+
+    const EmailSignIn = async () => {
+        await supabase.auth.signInWithOAuth({
+            provider: 'email',
+        })
+    }
+
+    const GitHubSignIn = async () => {
+        await supabase.auth.signInWithOAuth({
+            provider: 'github',
+        })
+    }
+
 </script>
 
 <style lang="postcss">
@@ -59,6 +73,18 @@
         <h1 class="text-3xl font-bold underline">
             Hello world!
         </h1>
+        <Button color="light" class="w-full mt-5 btn btn-filled-surface" on:click={EmailSignIn}>
+            <span class="h-5 mr-3">
+              <Button />
+            </span>
+            Emailでログイン
+        </Button>
+        <Button color="light" class="w-full mt-5 btn btn-filled-surface" on:click={GitHubSignIn}>
+            <span class="h-5 mr-3">
+              <!-- <FaGithub /> -->
+            </span>
+            GitHubでログイン
+        </Button>
         <div>
         {#if users.length > 0}
         <div>ある</div>
