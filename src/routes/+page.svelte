@@ -8,7 +8,6 @@
 
     // アップロード
     import { Label, Button } from 'flowbite-svelte'
-    // let files: FileList | null = null;
 
     // const updateUser = async () => {
     //     const update_data = {
@@ -48,36 +47,31 @@
     }
 
 
-    async function signUpNewUser() {
-        const { data, error } = await supabase.auth.signUp({
-            email: 'example@email.com',
-            password: 'example-password',
-            options: {
-            emailRedirectTo: 'https//example.com/welcome'
-            }
-        })
+    const handleSignIn = async () => {
+      await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
     }
 
-    async function signOut() {
-        const { error } = await supabase.auth.signOut()
+    const handleSignOut = async () => {
+      await supabase.auth.signOut()
     }
 
-    async function signInWithEmail() {
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email: 'example@email.com',
-            password: 'example-password'
-        })
-        console.log(error);
-        console.log(data);
+    let loadedData = []
+    async function loadData() {
+        const { data: result } = await data.supabase.from('test').select('*').limit(20)
+        loadedData = result
     }
 
-    // const GitHubSignIn = async () => {
-    //     await supabase.auth.signInWithOAuth({
-    //         provider: 'github',
-    //     })
-    // }
-
+    $: if (data.session) {
+        loadData()
+    }
 </script>
+{#if data.session}
+<p>client-side data fetching with RLS</p>
+<pre>{JSON.stringify(loadedData, null, 2)}</pre>
+{/if}
 
 <style lang="postcss">
     :global(html) {
@@ -90,18 +84,6 @@
         <h1 class="text-3xl font-bold underline">
             Hello world!
         </h1>
-        <Button color="light" class="w-full mt-5 btn btn-filled-surface" on:click={signInWithEmail}>
-            <span class="h-5 mr-3">
-              <Button />
-            </span>
-            Emailでログイン
-        </Button>
-        <!-- <Button color="light" class="w-full mt-5 btn btn-filled-surface" on:click={GitHubSignIn}>
-            <span class="h-5 mr-3">
-              <FaGithub />
-            </span>
-            GitHubでログイン
-        </Button> -->
         <div>
         <hr />
         {#if users.length > 0}
