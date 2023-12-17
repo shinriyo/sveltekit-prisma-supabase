@@ -52,3 +52,26 @@ https://zenn.dev/shimabukuromeg/scraps/51ea9b884fc607
 # Auth
 
 Sveltekit × supabase で認証機能を作る
+
+
+```
+#       modified:   src/hooks.server.ts
+#       modified:   src/routes/+page.svelte
+#       new file:   src/routes/api/protected-route/+server.ts
+#       new file:   src/routes/auth/+page.svelte
+#       new file:   src/routes/auth/callback/+server.ts
+#       new file:   src/routes/login/+page.server.ts
+#       new file:   src/routes/login/+page.svelte
+#       new file:   src/routes/posts/+page.server.ts
+#       new file:   src/routes/profile/+page.svelte
+#       new file:   src/routes/profile/+page.ts
+``
+
+管理画面
+
+https://supabase.com/dashboard/project/srubwrrvsvnxdktwmuxj/auth/users
+
+
+# ログインここ参考にした
+
+https://supabase.com/docs/guides/auth/auth-helpers/sveltekit
