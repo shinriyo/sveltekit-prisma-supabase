@@ -75,3 +75,7 @@ https://supabase.com/dashboard/project/srubwrrvsvnxdktwmuxj/auth/users
 # ログインここ参考にした
 
 https://supabase.com/docs/guides/auth/auth-helpers/sveltekit
+
+
+
+http://localhost:5173/auth

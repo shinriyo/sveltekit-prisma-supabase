@@ -7,7 +7,7 @@
     const { users, supabase } = data;
 
     // アップロード
-    import { Label, Button } from 'flowbite-svelte'
+    import { Label } from 'flowbite-svelte'
 
     // const updateUser = async () => {
     //     const update_data = {
@@ -26,39 +26,48 @@
         // if (!files || files.length === 0) {
         //     return
         // }
-        if (inputElement instanceof HTMLInputElement) {
-            if (!inputElement.files) {
-                return
-            }
+        try {
+            if (inputElement instanceof HTMLInputElement) {
+                if (!inputElement.files) {
+                    return
+                }
 
-            const files = inputElement.files;
-            const file = files[0]
-            if (file.name.split('.').length < 1) {
-                return;
-            }
+                const files = inputElement.files;
+                const file = files[0]
+                if (file.name.split('.').length < 1) {
+                    return;
+                }
 
-            const fileExt = file.name.split('.').pop()
-            const filePath = `${inputElement.id}/${Math.random()}.${fileExt}`;
-            console.log(filePath)
-            // const filePath = `${session.user.id}/${Math.random()}.${fileExt}`
-            // console.log(customArgument)
-            await supabase.storage.from('avatars').upload(filePath, file)
+                const fileExt = file.name.split('.').pop()
+                const filePath = `${inputElement.id}/${Math.random()}.${fileExt}`;
+                // const filePath = `${Math.random()}.${fileExt}`;
+                console.log(filePath)
+                // const filePath = `${session.user.id}/${Math.random()}.${fileExt}`
+                // console.log(customArgument)
+                const { data, error } = await supabase.storage.from('avatars').upload(filePath, file)
+
+                if (error) {
+                    throw error
+                }
+            }
+        } catch(error) {
+            alert(error.message)
+            // if (error instanceof Error) {
+            //     alert(error.message)
+            // }
+        } finally {
+            //
+                
+            // TODO: 画像のURLをDBに保存
+            // const { error: databaseError } = await supabase
+            //   .from('my_table')
+            //   .insert({ imageUrl: imageUrl })
         }
     }
 
-
-    const handleSignIn = async () => {
-      await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
-    }
-
-    const handleSignOut = async () => {
-      await supabase.auth.signOut()
-    }
-
     let loadedData = []
+
+
     async function loadData() {
         const { data: result } = await data.supabase.from('test').select('*').limit(20)
         loadedData = result
@@ -67,6 +76,35 @@
     $: if (data.session) {
         loadData()
     }
+
+    // FIXME: 後で消す
+    const handleImageChange = async (
+    event: ChangeEvent<HTMLInputElement>
+      ): Promise<void> => {
+    if (!event.target.files || event.target.files.length == 0) {
+      // 画像が選択されていないのでreturn
+      return
+    }
+
+    const file = event.target.files[0] // 選択された画像を取得
+    const filePath = `my_folder/${file.name}` // 画像の保存先のpathを指定
+    const { error } = await supabase.storage
+      .from('avatars')
+      .upload(filePath, file)
+    if (error) {
+      // ここでエラーハンドリング
+    }
+
+    // 画像のURLを取得
+    const { data } = supabase.storage.from('avatars').getPublicUrl(filePath)
+    const imageUrl = data.publicUrl
+    console.log(imageUrl)
+    
+    // TODO: 画像のURLをDBに保存
+    // const { error: databaseError } = await supabase
+    //   .from('my_table')
+    //   .insert({ imageUrl: imageUrl })
+  }
 </script>
 {#if data.session}
 <p>client-side data fetching with RLS</p>
@@ -84,6 +122,7 @@
         <h1 class="text-3xl font-bold underline">
             Hello world!
         </h1>
+        <input type="file" onChange={handleImageChange} />
         <div>
         <hr />
         {#if users.length > 0}
