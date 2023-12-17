@@ -48,17 +48,34 @@
     }
 
 
-    const EmailSignIn = async () => {
-        await supabase.auth.signInWithOAuth({
-            provider: 'email',
+    async function signUpNewUser() {
+        const { data, error } = await supabase.auth.signUp({
+            email: 'example@email.com',
+            password: 'example-password',
+            options: {
+            emailRedirectTo: 'https//example.com/welcome'
+            }
         })
     }
 
-    const GitHubSignIn = async () => {
-        await supabase.auth.signInWithOAuth({
-            provider: 'github',
-        })
+    async function signOut() {
+        const { error } = await supabase.auth.signOut()
     }
+
+    async function signInWithEmail() {
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: 'example@email.com',
+            password: 'example-password'
+        })
+        console.log(error);
+        console.log(data);
+    }
+
+    // const GitHubSignIn = async () => {
+    //     await supabase.auth.signInWithOAuth({
+    //         provider: 'github',
+    //     })
+    // }
 
 </script>
 
@@ -73,21 +90,22 @@
         <h1 class="text-3xl font-bold underline">
             Hello world!
         </h1>
-        <Button color="light" class="w-full mt-5 btn btn-filled-surface" on:click={EmailSignIn}>
+        <Button color="light" class="w-full mt-5 btn btn-filled-surface" on:click={signInWithEmail}>
             <span class="h-5 mr-3">
               <Button />
             </span>
             Emailでログイン
         </Button>
-        <Button color="light" class="w-full mt-5 btn btn-filled-surface" on:click={GitHubSignIn}>
+        <!-- <Button color="light" class="w-full mt-5 btn btn-filled-surface" on:click={GitHubSignIn}>
             <span class="h-5 mr-3">
-              <!-- <FaGithub /> -->
+              <FaGithub />
             </span>
             GitHubでログイン
-        </Button>
+        </Button> -->
         <div>
+        <hr />
         {#if users.length > 0}
-        <div>ある</div>
+        <div>userある</div>
         <ul>
             {#each users as user}
             <div class="w-4/5 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-white-50 dark:text-gray-400 focus:outline-none dark:bg-white-700 dark:border-gray-600 dark:placeholder-gray-400">
