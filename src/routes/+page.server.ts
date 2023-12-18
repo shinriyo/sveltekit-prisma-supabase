@@ -6,13 +6,19 @@ import { fail, redirect } from "@sveltejs/kit";
 // https://tech-blog.rakus.co.jp/entry/20230209/sveltekit
 
 export const actions: Actions = {
-    del: async ({request}) => {
-		const userId = request.params.userId; // 削除対象のユーザーID
+    // del: async ({request}) => {
+    // del: async (request) => {
+    del: async ({request,locals, params}) => {
+		const data = await request.formData();
+        const userId = data.get("userId");
+		// console.log(request.params)
+		// const userId = request.params.userId; // 削除対象のユーザーID
+		console.log(userId)
 
 		try {
 			const deletedUser = await prisma.user.delete({
 				where: {
-					id: userId,
+					id: parseInt(userId?.toString()!),
 				},
 			});
 
@@ -23,13 +29,16 @@ export const actions: Actions = {
 				},
 			};
 		} catch (error) {
-			return {
-				status: 500,
-				body: {
-					message: 'ユーザーの削除中にエラーが発生しました。',
-					error: error.message,
-				},
-			};
+			console.log(error)
+			if (error instanceof Error) {
+				return {
+					status: 500,
+					body: {
+						message: 'ユーザーの削除中にエラーが発生しました。',
+						error: error.message,
+					},
+				};
+			}
 		}
 	},
     register : async ({request}) => {

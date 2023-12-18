@@ -177,7 +177,21 @@
                     accept="image/*"
                     on:change={uploadIcon}
                 />
+
+                <form method="post" action="?/del" class="flex gap-2 my-2">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input
+                        class="rounded w-full p-2"
+                        type="text"
+                        placeholder="おなまえ"
+                        name="userId"
+                        value="{user.id}"
+                        hidden
+                    />
+                    <button type="submit" class="btn-black"> さくじょ　</button>
+                </form>
                 </div>
+
                 {/each}
             </ul>
             {:else}
