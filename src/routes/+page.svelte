@@ -81,7 +81,7 @@
                 const { error: databaseError } = await supabase
                   .from('Post')
                 //   .insert({ imageUrl: imageUrl })
-                  .insert({ title: imageUrl, content: '画像' })
+                  .insert({ title: imageUrl, content: '画像', published: true })
             }
         } catch(error) {
             alert(error.message)
