@@ -78,9 +78,10 @@
                 console.log(imageUrl)
                 
                 // TODO: 画像のURLをDBに保存
-                // const { error: databaseError } = await supabase
-                //   .from('avatars')
+                const { error: databaseError } = await supabase
+                  .from('Post')
                 //   .insert({ imageUrl: imageUrl })
+                  .insert({ title: imageUrl, content: '画像' })
             }
         } catch(error) {
             alert(error.message)
@@ -98,7 +99,7 @@
 
 
     async function loadData() {
-        const { data: result } = await data.supabase.from('test').select('*').limit(20)
+        const { data: result } = await data.supabase.from('Post').select('*').limit(20)
         loadedData = result
     }
 
