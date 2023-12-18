@@ -19,6 +19,27 @@
     //     .from('profiles')
     //     .update(update_data)
     // }
+    let errorText = "";
+    // https://github.com/supabase/supabase/blob/master/examples/todo-list/sveltejs-todo-list/src/lib/TodoList.svelte
+    const addTodo = async (taskText: string, name: string) => {
+        let email = taskText.trim();
+        if (email.length) {
+            // 大文字小文字区別されれる
+            let { data: todo, error } = await supabase
+            .from("User")
+            .insert({ email, name: name })
+            .select()
+            .single();
+
+            if (error) {
+                errorText = error.message;
+                console.log(errorText);
+            } else {
+                todos = [...todos, todo];
+                newTaskText = "";
+            }
+        }
+    };
 
     // const uploadIcon = async (event: Event, customArgument: number) => {
     const uploadIcon = async (event: Event) => {
@@ -52,17 +73,14 @@
 
                 // 画像のURLを取得
                 // https://srubwrrvsvnxdktwmuxj.supabase.co/storage/v1/object/public/avatars/file-2/0.39026193822758937.png
-                const pugData = supabase.storage.from('avatars').getPublicUrl('file-2/0.39026193822758937.png')
-                // const { pugData, error2 } = await supabase
-                //     .storage
-                //         .from('avatars')
-                //         .download('file-2/0.39026193822758937.png')
+                // const pugData = supabase.storage.from('avatars').getPublicUrl('file-2/0.39026193822758937.png')
+                const pugData = supabase.storage.from('avatars').getPublicUrl(filePath)
                 const imageUrl = pugData.data.publicUrl
                 console.log(imageUrl)
                 
                 // TODO: 画像のURLをDBに保存
                 // const { error: databaseError } = await supabase
-                //   .from('my_table')
+                //   .from('avatars')
                 //   .insert({ imageUrl: imageUrl })
             }
         } catch(error) {
@@ -76,6 +94,8 @@
     }
 
     let loadedData = []
+    let newTaskText = "";
+    let email = "";
 
 
     async function loadData() {
@@ -103,6 +123,24 @@
         <h1 class="text-3xl font-bold underline">
             Hello world!
         </h1>
+        <form
+            on:submit|preventDefault={() => addTodo(newTaskText, email)}
+            class="flex gap-2 my-2"
+        >
+            <input
+                class="rounded w-full p-2"
+                type="text"
+                placeholder="Eめーる"
+                bind:value={email}
+            />
+            <input
+                class="rounded w-full p-2"
+                type="text"
+                placeholder="make coffee"
+                bind:value={newTaskText}
+            />
+            <button type="submit" class="btn-black"> Add </button>
+        </form>
         <div>
             <hr />
             {#if users.length > 0}
@@ -114,7 +152,7 @@
                 <li>email: {user.email}</li>
                 <li>name: {user.name}</li>
                 <hr />
-                <Label class="w-1/5 pb-2">アイコンアップロード</Label>
+                <Label class="w-4/5 pb-2">アイコンアップロード</Label>
                 <input
                     id="file-{user.id.toString()}"
                     class="w-4/5 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
