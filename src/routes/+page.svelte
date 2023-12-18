@@ -118,6 +118,7 @@
     }
 </style> 
 <hr />
+<a href="./auth" class="btn-black">ろぐいんだお</a>
 <!-- 後で参考にしたい -->
 <!-- https://qiita.com/maaaashi/items/fbeb32b4ec1663fc1383 -->
 <div class="flex">
