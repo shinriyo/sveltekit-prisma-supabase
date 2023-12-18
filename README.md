@@ -79,3 +79,13 @@ https://supabase.com/docs/guides/auth/auth-helpers/sveltekit
 
 
 http://localhost:5173/auth
+
+# カラムの追加
+
+https://zenn.dev/thirosue/books/49a4ee418743ed/viewer/57d161
+
+```
+npx prisma migrate dev --name add_tel_to_user
+```
+
+userにtel追加したい
