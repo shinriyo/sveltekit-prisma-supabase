@@ -2,7 +2,6 @@
     // import type { ChangeEventHandler } from 'svelte/elements';
     import type { PageData } from './$types';
     // import type { SupabaseClient } from '@supabase/supabase-js'
-    // export let supabase: SupabaseClient
     export let data: PageData;
     const { users, supabase } = data;
 
@@ -35,7 +34,7 @@
                 errorText = error.message;
                 console.log(errorText);
             } else {
-                todos = [...todos, todo];
+                // todos = [...todos, todo];
                 newTaskText = "";
             }
         }
@@ -118,11 +117,29 @@
     }
 </style> 
 <hr />
+<!-- 後で参考にしたい -->
+<!-- https://qiita.com/maaaashi/items/fbeb32b4ec1663fc1383 -->
 <div class="flex">
     <div>
         <h1 class="text-3xl font-bold underline">
             Hello world!
         </h1>
+        <form method="post" action="?/register" class="flex gap-2 my-2">
+            <input
+                class="rounded w-full p-2"
+                type="text"
+                placeholder="Email"
+                name="email"
+            />
+            <input
+                class="rounded w-full p-2"
+                type="text"
+                placeholder="おなまえ"
+                name="name"
+            />
+            <button type="submit" class="btn-black"> Add </button>
+        </form>
+
         <form
             on:submit|preventDefault={() => addTodo(newTaskText, email)}
             class="flex gap-2 my-2"
