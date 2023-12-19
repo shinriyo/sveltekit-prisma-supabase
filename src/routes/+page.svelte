@@ -19,16 +19,17 @@
     //     .update(update_data)
     // }
     let errorText = "";
+    //
     // https://github.com/supabase/supabase/blob/master/examples/todo-list/sveltejs-todo-list/src/lib/TodoList.svelte
     const addTodo = async (taskText: string, name: string) => {
         let email = taskText.trim();
         if (email.length) {
             // 大文字小文字区別されれる
             let { data: todo, error } = await supabase
-            .from("User")
-            .insert({ email, name: name })
-            .select()
-            .single();
+                .from("User")
+                .insert({ email, name })
+                .select()
+                .single();
 
             if (error) {
                 errorText = error.message;
@@ -119,8 +120,6 @@
 </style> 
 <hr />
 <a href="./auth" class="btn-black">ろぐいんだお</a>
-<!-- 後で参考にしたい -->
-<!-- https://qiita.com/maaaashi/items/fbeb32b4ec1663fc1383 -->
 <div class="flex">
     <div>
         <h1 class="text-3xl font-bold underline">
@@ -130,14 +129,14 @@
             <input
                 class="rounded w-full p-2"
                 type="text"
-                placeholder="Email"
-                name="email"
+                placeholder="タイトル"
+                name="title"
             />
             <input
                 class="rounded w-full p-2"
                 type="text"
-                placeholder="おなまえ"
-                name="name"
+                placeholder="ないよう"
+                name="content"
             />
             <button type="submit" class="btn-black"> Add </button>
         </form>
@@ -161,6 +160,42 @@
             <button type="submit" class="btn-black"> Add </button>
         </form>
         <div>
+            {#if loadedData.length > 0}
+            <div>userある</div>
+            <ul>
+                {#each loadedData as item}
+                <div class="w-4/5 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-white-50 dark:text-gray-400 focus:outline-none dark:bg-white-700 dark:border-gray-600 dark:placeholder-gray-400">
+                <li>title: {item.title}</li>
+                <li>name: {item.content}</li>
+                <hr />
+                <Label class="w-4/5 pb-2">アイコンアップロード</Label>
+                <input
+                    id="file-{item.id.toString()}"
+                    class="w-4/5 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    type="file"
+                    accept="image/*"
+                    on:change={uploadIcon}
+                />
+
+                <form method="post" action="?/delPost" class="flex gap-2 my-2">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input
+                        class="rounded w-full p-2"
+                        type="text"
+                        placeholder="おなまえ"
+                        name="userId"
+                        value="{item.id}"
+                        hidden
+                    />
+                    <button type="submit" class="btn-black"> さくじょ　</button>
+                </form>
+                </div>
+
+                {/each}
+            </ul>
+            {:else}
+                <div>ない</div>
+            {/if}
             <hr />
             {#if users.length > 0}
             <div>userある</div>
