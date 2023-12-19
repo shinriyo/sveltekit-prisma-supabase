@@ -8,21 +8,17 @@ import { fail, redirect } from "@sveltejs/kit";
 export const actions: Actions = {
 	delPost: async ({request, locals, params}) => {
 		const data = await request.formData();
-        const userId = data.get("userId");
-		// console.log(request.params)
-		// const userId = request.params.userId; // 削除対象のユーザーID
-		console.log(userId)
-
+        const itemId = data.get("itemId");
 		try {
-			const deletedUser = await prisma.user.delete({
+			const deletedUser = await prisma.post.delete({
 				where: {
-					id: parseInt(userId?.toString()!),
+					id: parseInt(itemId?.toString()!),
 				},
 			});
 
 			return {
 				body: {
-					message: 'ユーザーが削除されました。',
+					message: 'とうこうが削除されました。',
 					user: deletedUser,
 				},
 			};
@@ -32,7 +28,7 @@ export const actions: Actions = {
 				return {
 					status: 500,
 					body: {
-						message: 'ユーザーの削除中にエラーが発生しました。',
+						message: 'ユとうこうの削除中にエラーが発生しました。',
 						error: error.message,
 					},
 				};
