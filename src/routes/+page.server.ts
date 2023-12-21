@@ -1,7 +1,7 @@
 import prisma from '$lib/server/prisma';
 import type { PageServerLoad, Actions } from './$types';
 import { fail, redirect } from "@sveltejs/kit";
-import supabase from '@supabase/supabase-js'
+// import { handle } from '../../src/hooks.server';
 
 // 参考になる記事
 // https://tech-blog.rakus.co.jp/entry/20230209/sveltekit
@@ -11,19 +11,33 @@ export const actions: Actions = {
 		const data = await request.formData();
         const itemId = data.get("itemId");
 		try {
-			const deleteePost = await prisma.post.delete({
+			const deletedPost = await prisma.post.delete({
 				where: {
 					id: parseInt(itemId?.toString()!),
 				},
 			});
+			let content = deletedPost.content;
+			if (content != null) {
+				const pathSegments = content.split('/');
+				const fileName = pathSegments[pathSegments.length - 1];
+				console.log('消すやつ>>>>>>>');
+				console.log(fileName);
+				// const fileNames = [];
+// for (let i = 1; i <= 20; i++) {
+//   fileNames.push(`${i}.png`);
+// }
+				const { data, error } = await locals.supabase.storage
+					.from('avatars')
+					.remove([fileName]);
+				console.log('res>>>>>>>');
+				console.log(data);
+				console.log(error);
+			}
 
-			const { data, error } = await supabase.storage
-			.from(bucketName)
-			.remove([fileName]);
 			return {
 				body: {
-					message: 'とうこうが削除されました。',
-					user: deleteePost,
+					message: 'Postが削除されました。',
+					user: deletedPost,
 				},
 			};
 		} catch (error) {
@@ -32,7 +46,7 @@ export const actions: Actions = {
 				return {
 					status: 500,
 					body: {
-						message: 'ユとうこうの削除中にエラーが発生しました。',
+						message: 'Postの削除中にエラーが発生しました。',
 						error: error.message,
 					},
 				};

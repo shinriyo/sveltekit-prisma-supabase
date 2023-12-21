@@ -60,7 +60,8 @@
                 }
 
                 const fileExt = file.name.split('.').pop()
-                const filePath = `${inputElement.id}/${Math.random()}.${fileExt}`;
+                // const filePath = `${inputElement.id}/${Math.random()}.${fileExt}`;
+                const filePath = `${inputElement.id}.${fileExt}`;
                 // const filePath = `${Math.random()}.${fileExt}`;
                 console.log(filePath)
                 // const filePath = `${session.user.id}/${Math.random()}.${fileExt}`
@@ -78,9 +79,9 @@
                 const imageUrl = pugData.data.publicUrl
                 console.log(imageUrl)
                
-                let myId = inputElement.id.toString().replace('file-', '')
+                let myId = inputElement.id.toString()
                 console.log(myId)
-                // TODO: 画像のURLをDBに保存
+                // 画像のURLをDBに保存
                 const { error: databaseError } = await supabase
                   .from('Post')
                   // .insert({ title: imageUrl, content: '画像', published: true })
@@ -93,6 +94,7 @@
             }
         } finally {
             //
+            loadData()
         }
     }
 
@@ -175,7 +177,7 @@
                     <hr />
                     <Label class="w-4/5 pb-2">アイコンアップロード</Label>
                     <input
-                        id="file-{item.id.toString()}"
+                        id="{item.id.toString()}"
                         class="w-4/5 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                         type="file"
                         accept="image/*"
@@ -213,7 +215,7 @@
                     <hr />
                     <Label class="w-4/5 pb-2">アイコンアップロード</Label>
                     <input
-                        id="file-{user.id.toString()}"
+                        id="{user.id.toString()}"
                         class="w-4/5 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                         type="file"
                         accept="image/*"
@@ -230,7 +232,7 @@
                             value="{user.id}"
                             hidden
                         />
-                        <button type="submit" class="btn-black">さくじょ　</button>
+                        <button type="submit" class="btn-black">削除する</button>
                     </form>
                 </div>
                 {/each}
