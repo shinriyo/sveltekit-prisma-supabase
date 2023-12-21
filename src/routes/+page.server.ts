@@ -1,6 +1,7 @@
 import prisma from '$lib/server/prisma';
 import type { PageServerLoad, Actions } from './$types';
 import { fail, redirect } from "@sveltejs/kit";
+import supabase from '@supabase/supabase-js'
 
 // 参考になる記事
 // https://tech-blog.rakus.co.jp/entry/20230209/sveltekit
@@ -10,16 +11,19 @@ export const actions: Actions = {
 		const data = await request.formData();
         const itemId = data.get("itemId");
 		try {
-			const deletedUser = await prisma.post.delete({
+			const deleteePost = await prisma.post.delete({
 				where: {
 					id: parseInt(itemId?.toString()!),
 				},
 			});
 
+			const { data, error } = await supabase.storage
+			.from(bucketName)
+			.remove([fileName]);
 			return {
 				body: {
 					message: 'とうこうが削除されました。',
-					user: deletedUser,
+					user: deleteePost,
 				},
 			};
 		} catch (error) {
