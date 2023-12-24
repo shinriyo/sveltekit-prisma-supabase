@@ -20,16 +20,9 @@ export const actions: Actions = {
 			if (content != null) {
 				const pathSegments = content.split('/');
 				const fileName = pathSegments[pathSegments.length - 1];
-				console.log('消すやつ>>>>>>>');
-				console.log(fileName);
-				// const fileNames = [];
-// for (let i = 1; i <= 20; i++) {
-//   fileNames.push(`${i}.png`);
-// }
 				const { data, error } = await locals.supabase.storage
 					.from('avatars')
 					.remove([fileName]);
-				console.log('res>>>>>>>');
 				console.log(data);
 				console.log(error);
 			}
@@ -53,8 +46,44 @@ export const actions: Actions = {
 			}
 		}
 	},
-    // del: async ({request}) => {
-    // del: async (request) => {
+    editPost: async ({request, locals, params}) => {
+		const data = await request.formData();
+        const postId = data.get("postId");
+        const title = data.get("title");
+		if (title == null) {
+			return
+		 }
+
+		try {
+			const deletedUser = await prisma.post.update({
+				where: {
+					id: parseInt(postId?.toString()!),
+				},
+				data: {
+					id: Number(postId),
+					title: title.toString(),
+				},
+			});
+
+			return {
+				body: {
+					message: 'ユーザーが削除されました。',
+					user: deletedUser,
+				},
+			};
+		} catch (error) {
+			console.log(error)
+			if (error instanceof Error) {
+				return {
+					status: 500,
+					body: {
+						message: 'ユーザーの削除中にエラーが発生しました。',
+						error: error.message,
+					},
+				};
+			}
+		}
+	},
     del: async ({request, locals, params}) => {
 		const data = await request.formData();
         const userId = data.get("userId");

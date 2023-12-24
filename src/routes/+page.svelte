@@ -173,7 +173,30 @@
                 <div class="w-4/5 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-white-50 dark:text-gray-400 focus:outline-none dark:bg-white-700 dark:border-gray-600 dark:placeholder-gray-400">
                     <li>title: {item.title}</li>
                     <li>content: {item.content}</li>
-                    <img src={item.content} width="90" height="90" alt="がぞお" />
+                    {#if item.content}
+                      <!-- imageUrlがnullでない場合、画像を表示 -->
+                      <img src={item.content} width="90" height="90" alt="がぞお" />
+                    {:else}
+                      <!-- imageUrlがnullの場合、代替のコンテンツを表示 -->
+                      <p>画像はありません</p>
+                    {/if}
+                    <hr />
+                    <form method="post" action="?/editPost" class="flex gap-2 my-2">
+                        <input
+                            class="rounded w-full p-2"
+                            type="text"
+                            name="postId"
+                            value="{item.id.toString()}"
+                            hidden
+                        />
+                        <input
+                            class="rounded w-full p-2"
+                            type="text"
+                            placeholder="タイトル"
+                            name="title"
+                        />
+                        <button type="submit" class="btn-black"> 編集 </button>
+                    </form>
                     <hr />
                     <Label class="w-4/5 pb-2">アイコンアップロード</Label>
                     <input
@@ -227,7 +250,6 @@
                         <input
                             class="rounded w-full p-2"
                             type="text"
-                            placeholder="おなまえ"
                             name="userId"
                             value="{user.id}"
                             hidden
