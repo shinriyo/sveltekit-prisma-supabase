@@ -89,3 +89,17 @@ npx prisma migrate dev --name add_tel_to_user
 ```
 
 userにtel追加したい
+
+# buildする
+
+```
+npm run build
+```
+
+いかにできる
+```
+.svelte-kit/
+```
+
+参考:
+https://qiita.com/jwnr/items/740335cfb7d8e000c749
